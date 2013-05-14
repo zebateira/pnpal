@@ -94,17 +94,15 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-.sprite {
-    width: 32px;
-    height: 32px;
+.sprite-container .sprite {
+    min-width: 32px;
+    min-height: 32px;
     background: url("../img/sprites.bmp") 0px 0px;
-    background-size: initial;
-    background-repeat-x: initial;
-    background-repeat-y: initial;
-    background-attachment: initial;
-    background-origin: initial;
-    background-clip: initial;
-    background-color: initial;
+    display: inline-block;
+}
+
+.sprite-container {
+    line-height: 0px;
 }
 
 /* ==========================================================================

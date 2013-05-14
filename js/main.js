@@ -4,7 +4,7 @@ $(document).ready(function () {
 	var max_collumns = 63
 
 	function addSprite(row, collumn) {
-		container.append('<img class="sprite" data-row="' + row + '" data-collumn="' + collumn + '" />')
+		container.append('<span class="sprite" data-row="' + row + '" data-collumn="' + collumn + '" />')
 	}
 
 	// add sprites to sprite container
