@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function ($) {
 	var container = $('.sprite-container')
 	var max_rows = 70
 	var max_collumns = 63
@@ -17,8 +17,10 @@ $(document).ready(function () {
 
 	// add positions of sprite image for every sprite
 	$('.sprite').each(function() {
-		$(this).css('background-position-x', calcSpritePosition($(this).attr('data-collumn')))
-			   .css('background-position-y', calcSpritePosition($(this).attr('data-row')))
+		$(this).css({'background': 'url("img/sprites.bmp") ' +
+									calcSpritePosition($(this).attr('data-collumn')) + " " +
+									calcSpritePosition($(this).attr('data-row'))
+				})
 	})
 
 	function calcSpritePosition(coord) {
