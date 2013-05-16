@@ -66,38 +66,6 @@ $(document).ready(function ($) {
 	// calculates pixel position for the background image position attribute. p.e. 0 = 0*32 = -32px, 3 => 3*32 = -96px
 	// each sprite is 32x32 hence *32
 	function calcSpritePosition(coord) {
-		return - 32 * coord + 'px'
-	}
-
-
-	// random funcs
-
-	function drawAllSprites() {
-		// adds positions of sprite image for every sprite ("draws" the sprite)
-		$('.sprite').each(function() {
-			var data_collumn = $(this).attr('data-collumn')
-			var data_row = $(this).attr('data-row')
-
-			$(this).css({'background': 'url("img/sprites.bmp") ' +
-										calcSpritePosition($(this).attr('data-collumn')) + " " +
-										calcSpritePosition($(this).attr('data-row'))})
-					.click(function() {
-						console.log('(' + data_collumn + ',' + data_row + ')')
-						$(this).toggleClass('selected')
-					})
-		})
-	}
-
-	// draws all the sprites in all the sprite containers
-	function dumpAllSprites() {
-		var container = new spriteContainer('.sprite-container')
-
-		for (var row = 0; row <= max_rows; row++) {
-			for (var collumn = 0; collumn <= max_collumns; collumn++) {
-				var tempSprite = new sprite(row+collumn, row, collumn)
-
-				container.addSprite(tempSprite)
-			}
-		}
+		return - 32 * coord + "px"
 	}
 })
