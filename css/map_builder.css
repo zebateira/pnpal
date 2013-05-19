@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Map Builder Styles
+   ========================================================================== */
+
+.sprite-container {
+    line-height: 0px;
+}
+
+.sprite-container .sprite {
+    min-width: 32px;
+    min-height: 32px;
+    background: url("img/sprites.bmp") 0px 0px;
+    display: inline-block;
+    -moz-opacity: 0.75;
+    opacity: 0.75;
+}
+
+.sprite-container .sprite:hover, .sprite-container .sprite.selected {
+    -moz-opacity: 1;
+    opacity: 1;
+}
+
+div#map_builder {
+    background-color: lightgrey;
+    vertical-align: center;
+}
+
+div#map_builder > div#sprite_selector {
+    float: left;
+    background-color: lightgreen;
+    display: inline-block;
+    width: 50%;
+}
+
+div#map_builder > div#map_canvas {
+    float: right;
+    background-color: lightblue;
+    display: inline-block;
+    width: 50%;
+}
