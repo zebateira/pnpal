@@ -9,32 +9,54 @@
 .sprite-container .sprite {
     min-width: 32px;
     min-height: 32px;
-    background: url("img/sprites.bmp") 0px 0px;
+    background: url("img/sprites.jpeg") 0px 0px;
     display: inline-block;
-    -moz-opacity: 0.75;
-    opacity: 0.75;
+    -webkit-opacity: 0.90;
+    -moz-opacity: 0.90;
+    opacity: 0.90;
+    border: 1px solid lightgrey;
 }
 
-.sprite-container .sprite:hover, .sprite-container .sprite.selected {
+.sprite-container .sprite:hover {
+    -webkit-opacity: 1;
     -moz-opacity: 1;
     opacity: 1;
 }
 
+.sprite-container .sprite.selected {
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+    opacity: 1;
+    width: 32px;
+    height: 32px;
+}
+
 div#map_builder {
-    background-color: lightgrey;
     vertical-align: center;
 }
 
 div#map_builder > div#sprite_selector {
     float: left;
-    background-color: lightgreen;
+    background-color: lightgrey;
     display: inline-block;
-    width: 50%;
+    width: 30%;
+    padding: 10px;
+
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
 }
 
 div#map_builder > div#map_canvas {
     float: right;
-    background-color: lightblue;
+    background-color: lightgrey;
     display: inline-block;
-    width: 50%;
+    width: 65%;
+    padding: 10px;
+
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
 }

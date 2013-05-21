@@ -23,14 +23,21 @@ spriteSel.change(function() {
 			spriteSelector.addSprite(new sprite('', y, x))
 })
 
+drawBackground(mapCanvas)
 spriteSel.change()
+
+
+
+// $('.draggable').draggable( {snap: true})
+
+/////// Objects
 
 // Sprite Container Object
 function spriteContainer(selector) {
 	this.selector = selector
 
 	this.addSprite = function(sprite) {
-		sprite.jqueryObj.appendTo(this.selector)
+		return sprite.jqueryObj.appendTo(this.selector)
 	}
 
 	this.cleanSprites = function() {
@@ -49,19 +56,36 @@ function sprite(id, row, collumn) {
 		id: this.id,
 		class: 'sprite',
 		'data-row': this.row,
-		'data-collumn': this.collumn
-	}).css({'background': 'url("img/sprites.bmp") ' +
+		'data-collumn': this.collumn})
+	.css({'background': 'url("img/sprites.jpeg") ' +
 		calcSpritePosition(this.collumn) + ' ' +
 		calcSpritePosition(this.row)})
+	.addClass('draggable')
+	.click(function() {
+		$(this).toggleClass('selected')
+	})
+	.draggable({snap: true,
+				stop: function(event, ui) {
+				},
+				stack: '.sprite'
+			})
 }
 
 
 
 
-// utils
+/////// utils
 
 // calculates pixel position for the background image position attribute. p.e. 0 = 0*32 = -32px, 3 => 3*32 = -96px
 // each sprite is 32x32 hence *32
 function calcSpritePosition(coord) {
 	return - 32 * coord + "px"
+}
+
+function drawBackground(canvas) {
+	for(var i = 0; i < 207; ++i)
+		canvas
+			.addSprite(new sprite('', 0, 0))
+			.draggable('disable')
+			.addClass('canvas')
 }

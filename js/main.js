@@ -1,3 +1,6 @@
+
+var debug = true;
+
 $(document).ready(function($) {
 	// var navBarValues = ['home', 'pnp_player', 'map_builder', 'char_builder', 'about_project', 'about_team']
 
@@ -9,8 +12,11 @@ $(document).ready(function($) {
 		$('li.active > a.nav-item').parent().removeClass('active')
 		$('a.nav-item[href^="' + document.location.hash + '"]').parent().addClass('active')
 
-		console.log('link -> ' + href)
+		if( debug )
+			console.log('link -> ' + href)
 	}
 
-	document.location.hash = '#home'
+	if( !document.location.hash )
+		document.location.hash = '#home'
+	else window.onhashchange()
 })
