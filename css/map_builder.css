@@ -4,6 +4,7 @@
 
 .sprite-container {
     line-height: 0px;
+
 }
 
 .sprite-container .sprite {
@@ -11,36 +12,39 @@
     min-height: 32px;
     background: url("img/sprites.jpeg") 0px 0px;
     display: inline-block;
-    -webkit-opacity: 0.90;
+    -webkit-opacity: 0.90
     -moz-opacity: 0.90;
     opacity: 0.90;
-    border: 1px solid lightgrey;
+    overflow: auto;
 }
 
-.sprite-container .sprite:hover {
+.sprite-container .sprite.canvas {
+    background-color: black;
+}
+
+div#sprite_selector .sprite-container .sprite:hover, .ui-selectee.ui-selected {
     -webkit-opacity: 1;
     -moz-opacity: 1;
     opacity: 1;
-}
-
-.sprite-container .sprite.selected {
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
-    opacity: 1;
-    width: 32px;
-    height: 32px;
+    -webkit-transform: scale(1.2, 1.2);
+    -moz-transform: scale(1.2, 1.2);
+    transform: scale(1.2, 1.2);
+    position: relative;
+    z-index: 9999;
 }
 
 div#map_builder {
     vertical-align: center;
 }
 
-div#map_builder > div#sprite_selector {
+div#map_builder div#sprite_selector {
     float: left;
     background-color: lightgrey;
     display: inline-block;
     width: 30%;
+    min-width: 50px;
     padding: 10px;
+    margin: 10px;
 
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
@@ -48,11 +52,15 @@ div#map_builder > div#sprite_selector {
     /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
 }
 
-div#map_builder > div#map_canvas {
-    float: right;
-    background-color: lightgrey;
+div#map_builder div#sprite_selector select {
+    width: inherit;
+}
+
+div#map_builder div#map_canvas {
+    background-color: grey;
     display: inline-block;
-    width: 65%;
+    width: auto;
+    min-width: 650px;
     padding: 10px;
 
     -moz-border-radius: 6px;
