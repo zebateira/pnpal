@@ -30,7 +30,6 @@ spriteSel.change(function() {
 
 spriteSel.change()
 mapCanvas.drawBackground()
-$(spriteSelector.selector).selectable()
 
 /////// Objects
 
@@ -62,6 +61,15 @@ function spriteGridContainer(selector) {
 				.appendTo(this.selector)
 				.draggable('disable')
 				.droppable('enable')
+				.unbind('click')
+				.click(function(e) {
+					console.log(e)
+					$(e.toElement).css({
+						'background': 'url("img/sprites.jpeg") ' +
+							calcSpritePosition($('.selected').attr('data-collumn')) + ' ' +
+							calcSpritePosition($('.selected').attr('data-row'))
+					})
+				})
 	}
 
 	this.drawBackground = function() {
@@ -98,11 +106,8 @@ function sprite(id, row, collumn) {
 				opacity: 0.75,
 				revert: 'invalid',
 				revertDuration: 25,
-				snap: true,
-				snapMode: 'inner',
-				stop: function(event, ui) {
-					console.log('dragging stoped')
-				},
+				// snap: true,
+				// snapMode: 'inner',
 				stack: '.sprite',
 				cursor: 'move',
 				helper: 'clone'
@@ -115,7 +120,15 @@ function sprite(id, row, collumn) {
 							calcSpritePosition($(event.toElement).attr('data-collumn')) + ' ' +
 							calcSpritePosition($(event.toElement).attr('data-row'))
 			})
-		},
+		}
+		
+	})
+	.click(function(){
+		$('.selected').not(this).each(function() {
+			$(this).removeClass('selected')
+		})
+		$(this).toggleClass('selected')
+		console.log($(this).hasClass())
 	})
 }
 

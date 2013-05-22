@@ -15,6 +15,9 @@
     -webkit-opacity: 0.90
     -moz-opacity: 0.90;
     opacity: 0.90;
+    -webkit-transform: scale(1, 1);
+    -moz-transform: scale(1, 1);
+    transform: scale(1, 1);
     overflow: auto;
 }
 
@@ -22,7 +25,7 @@
     background-color: black;
 }
 
-div#sprite_selector .sprite-container .sprite:hover, .ui-selectee.ui-selected {
+div#sprite_selector .sprite-container .sprite:hover, div#sprite_selector .sprite-container .sprite.selected {
     -webkit-opacity: 1;
     -moz-opacity: 1;
     opacity: 1;
@@ -60,7 +63,7 @@ div#map_builder div#map_canvas {
     background-color: grey;
     display: inline-block;
     width: auto;
-    min-width: 650px;
+    /*min-width: 650px;*/
     padding: 10px;
 
     -moz-border-radius: 6px;
