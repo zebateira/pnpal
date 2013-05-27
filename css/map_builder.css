@@ -15,9 +15,6 @@
     -webkit-opacity: 0.90
     -moz-opacity: 0.90;
     opacity: 0.90;
-    -webkit-transform: scale(1, 1);
-    -moz-transform: scale(1, 1);
-    transform: scale(1, 1);
     overflow: auto;
 }
 
@@ -25,7 +22,7 @@
     background-color: black;
 }
 
-div#sprite_selector .sprite-container .sprite:hover, div#sprite_selector .sprite-container .sprite.selected {
+div#sprite_selector .sprite-container .sprite.selected {
     -webkit-opacity: 1;
     -moz-opacity: 1;
     opacity: 1;
@@ -33,7 +30,18 @@ div#sprite_selector .sprite-container .sprite:hover, div#sprite_selector .sprite
     -moz-transform: scale(1.2, 1.2);
     transform: scale(1.2, 1.2);
     position: relative;
-    z-index: 9999;
+    z-index: 9999; /* brings to the front */
+}
+
+div#sprite_selector .sprite-container .sprite:hover {
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+    opacity: 1;
+    -webkit-transform: scale(1.1, 1.1);
+    -moz-transform: scale(1.1, 1.1);
+    transform: scale(1.1, 1.1);
+    position: relative;
+    z-index: 9999; /* brings to the front */
 }
 
 div#map_builder {
