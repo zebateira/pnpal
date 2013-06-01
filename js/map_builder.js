@@ -9,11 +9,13 @@ var max_collumns = 63
 // Sprite Categories
 var spriteCategory = {
 	'terrains': { min_x: 0, min_y: 0, max_x: 21, max_y: 0 },
-	'doorway': { min_x: 22, min_y: 0, max_x: 27, max_y: 0 },
 	'terrains 2': { min_x: 17, min_y: 52, max_x: 28, max_y: 52 },
+	'doorways': { min_x: 22, min_y: 0, max_x: 27, max_y: 0 },
 	'doors': { min_x: 3, min_y: 2, max_x: 16, max_y: 2 }
 }
 
+
+/////// main
 
 var mapCanvas = new spriteGridContainer('#map_canvas.sprite-container')
 var spriteSelectorCanvas = new spriteSelectorCanvas('div#sprite_selector > div.sprite-container')
@@ -24,9 +26,9 @@ spriteSelector.optionChanged()
 mapCanvas.drawBackground()
 
 
+
+
 /////// Objects
-
-
 function spriteSelector(selector, canvas) {
 
 	this.selector = selector
@@ -76,7 +78,7 @@ function spriteSelectorCanvas(selector) {
 }
 
 
-var shifter = true // used to alternate opacity to create grid effect
+// var shifter = true // used to alternate opacity to create grid effect
 function spriteGridContainer(selector) {
 	this.selector = selector;
 	this.spriteGrid = new Array(dimY)
@@ -89,24 +91,34 @@ function spriteGridContainer(selector) {
 				.appendTo(this.selector)
 				.draggable('enable')
 				.droppable('enable')
-				.draggable('option', 'cursor', 'auto')
-				.draggable('option', 'helper', 'clone')
-				.draggable('option', 'containment', 'parent')
-				.on('drag', function(event, ui) {
-					if( $(event.toElement).hasClass('canvas') )
-						$(event.toElement).css({
-							'background': 'url("img/sprites.jpeg") ' +
-								calcSpritePosition($('.selected').attr('data-collumn')) + ' ' +
-								calcSpritePosition($('.selected').attr('data-row'))
-						})
-				})
-				.on('drop', function(e) {
-					$(e.toElement)
-						.css({
-							'background': 'url("img/sprites.jpeg") ' +
-								calcSpritePosition($('.selected').attr('data-collumn')) + ' ' +
-								calcSpritePosition($('.selected').attr('data-row'))
-						})
+				.draggable({
+					cursor: 'auto',
+					containment: 'parent',
+					drag: function(event, ui) {
+
+						if( $(event.toElement).hasClass('canvas') )
+							$(event.toElement).css({
+								'background': 'url("img/sprites.jpeg") ' +
+									calcSpritePosition($('.selected').attr('data-collumn')) + ' ' +
+									calcSpritePosition($('.selected').attr('data-row'))
+							})
+					},
+					stop: function(event, ui) {
+						var elem = $(event.toElement)
+
+						if( !elem.hasClass('sprite') ||
+								!elem.hasClass('canvas') ||
+								!$('.selected') )
+							return;
+
+						elem
+							.css({
+								'background': 'url("img/sprites.jpeg") ' +
+									calcSpritePosition($('.selected').attr('data-collumn')) + ' ' +
+									calcSpritePosition($('.selected').attr('data-row'))
+							})
+						event.preventDefault()
+					}
 				})
 				.unbind('click')
 				.click(function(e) {
@@ -127,7 +139,7 @@ function spriteGridContainer(selector) {
 			for(var x = 0; x < dimX; ++x) {
 				this.spriteGrid[y][x] = this.addSprite()
 			}
-			shifter = !shifter
+			// shifter = !shifter
 			$(this.selector).append('</br>')
 		}
 	}
@@ -156,15 +168,9 @@ function sprite(id, row, collumn) {
 				helper: 'clone',
 				snap: true,
 				snapMode: 'inner'
-				// start: function(event, ui) {
-				// 	$('.selected').not(this).each(function() {
-				// 		$(this).removeClass('selected')
-				// 	})
-				// 	$(this).addClass('selected')
-				// }
 			})
 	.droppable({
-		torelance: 'fit',
+		torelance: 'pointer',
 		drop: function(event, ui) {
 			$(event.target)
 				.css({

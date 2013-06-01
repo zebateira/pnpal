@@ -12,9 +12,9 @@
     min-height: 32px;
     background: url("img/sprites.jpeg") 0px 0px;
     display: inline-block;
-    -webkit-opacity: 0.90
-    -moz-opacity: 0.90;
-    opacity: 0.90;
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+    opacity: 1;
     overflow: auto;
 }
 
@@ -73,6 +73,7 @@ div#map_builder div#map_canvas {
     width: auto;
     /*min-width: 650px;*/
     padding: 10px;
+    margin: 10px;
 
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
