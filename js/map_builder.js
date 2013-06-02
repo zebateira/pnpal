@@ -1,6 +1,6 @@
 /////// consts
-var dimX = 20
-var dimY = 20
+var canvasDimX = 20
+var canvasDimY = 20
 
 
 // Maximum number of sprites in images (max x and max y for the sprite image)
@@ -9,10 +9,10 @@ var max_collumns = 63
 
 // Sprite Categories
 var spriteCategory = {
-	'terrains': { min_x: 0, min_y: 0, max_x: 21, max_y: 0 },
-	'terrains 2': { min_x: 17, min_y: 52, max_x: 28, max_y: 52 },
-	'doorways': { min_x: 22, min_y: 0, max_x: 27, max_y: 0 },
-	'doors': { min_x: 3, min_y: 2, max_x: 16, max_y: 2 }
+	'terrains': { spriteX1: 0, spriteY1: 0, spriteX2: 21, spriteY2: 0 },
+	'terrains 2': { spriteX1: 17, spriteY1: 52, spriteX2: 28, spriteY2: 52 },
+	'doorways': { spriteX1: 22, spriteY1: 0, spriteX2: 27, spriteY2: 0 },
+	'doors': { spriteX1: 3, spriteY1: 2, spriteX2: 16, spriteY2: 2 }
 }
 
 
@@ -50,9 +50,9 @@ function spriteSelector(selector) {
 		
 		$('div#sprite_selector > div.sprite-container').html('')
 
-		for (var y = category.min_y; y <= category.max_y; ++y)
-			for (var x = category.min_x; x <= category.max_x; ++x)
-				new sprite('', y, x)
+		for (var spriteY = category.spriteY1; spriteY <= category.spriteY2; ++spriteY)
+			for (var spriteX = category.spriteX1; spriteX <= category.spriteX2; ++spriteX)
+				new sprite('', new coord(spriteY, spriteX))
 					.jqueryObj
 					.draggable('enable')
 					.appendTo('div#sprite_selector > div.sprite-container')
@@ -61,26 +61,28 @@ function spriteSelector(selector) {
 
 function spriteGridContainer(selector) {
 	this.selector = selector
-	this.spriteGrid = new Array(dimY)
+	this.spriteGrid = new Array(canvasDimY)
 
 	this.logMap = function() {
-		for(var y = 0; y < dimY; ++y) {
-			var row = ''
-			for(var x = 0; x < dimX; ++x) {
-				row += '(' + this.spriteGrid[y][x].collumn +
-							 ',' + this.spriteGrid[y][x].row + ') ' 
+		for(var y = 0; y < canvasDimY; ++y) {
+			var rowLog = ''
+			for(var x = 0; x < canvasDimX; ++x) {
+				rowLog += pad(this.spriteGrid[y][x].spriteCoord.x) + '-' +
+									pad(this.spriteGrid[y][x].spriteCoord.y) + ' '
 			}
-			console.log(row)
+			console.log(rowLog)
 		}
+
+		console.log('')
 	}
 
 	this.drawBackground = function() {
 
-		for(var y = 0; y < dimY; ++y) {
-			this.spriteGrid[y] = new Array(dimX)
+		for(var y = 0; y < canvasDimY; ++y) {
+			this.spriteGrid[y] = new Array(canvasDimX)
 
-			for(var x = 0; x < dimX; ++x) {
-				this.spriteGrid[y][x] = this.addSprite()
+			for(var x = 0; x < canvasDimX; ++x) {
+				this.spriteGrid[y][x] = this.addSprite(new sprite(new coord(y, x), new coord(0,0)))
 			}
 			$(this.selector).append('</br>')
 		}
@@ -89,18 +91,17 @@ function spriteGridContainer(selector) {
 	}
 
 
-	this.addSprite = function() {
-		var newSprite = new sprite('', 0, 0)
+	this.addSprite = function(newSprite) {
 
 		newSprite.jqueryObj
 				.addClass('canvas')
 				.appendTo(this.selector)
 				.droppable({
 					drop: function(event, ui) {
-						var row = $(event.toElement).attr('data-row')
-						var collumn = $(event.toElement).attr('data-collumn')
+						var spriteY = $(event.toElement).attr('data-sprite-y')
+						var spriteX = $(event.toElement).attr('data-sprite-x')
 
-						drawSprite(event.target, row, collumn)
+						drawSprite(event.target, spriteY, spriteX)
 					}
 				})
 				.draggable({
@@ -112,8 +113,8 @@ function spriteGridContainer(selector) {
 
 						if( $(event.toElement).hasClass('canvas') )
 							drawSprite(event.toElement,
-								$('.selected').attr('data-row'), 
-								$('.selected').attr('data-collumn'))
+								$('.selected').attr('data-sprite-y'), 
+								$('.selected').attr('data-sprite-x'))
 					},
 					stop: function(event, ui) {
 						var elem = $(event.toElement)
@@ -126,16 +127,17 @@ function spriteGridContainer(selector) {
 						}
 						
 						drawSprite(elem,
-							$('.selected').attr('data-row'), 
-							$('.selected').attr('data-collumn'))
+							$('.selected').attr('data-sprite-y'), 
+							$('.selected').attr('data-sprite-x'))
 						event.preventDefault()
 					}
 				})
 				.unbind('click')
 				.click(function(e) {
-					drawSprite(e.toElement,
-						$('.selected').attr('data-row'), 
-						$('.selected').attr('data-collumn'))
+					var spriteY = $('.selected').attr('data-sprite-y')
+					var spriteX = $('.selected').attr('data-sprite-x')
+
+					drawSprite(e.toElement, spriteY, spriteX)
 				})
 
 		return newSprite
@@ -144,19 +146,20 @@ function spriteGridContainer(selector) {
 }
 
 // Sprite Object
-function sprite(id, row, collumn) {
-	this.id = id
+function sprite(canvasCoord, spriteCoord) {
+	this.id = canvasCoord.x + '-' + canvasCoord.y
 
-	this.row = row
-	this.collumn = collumn
+	this.coord = canvasCoord
+	this.spriteCoord = spriteCoord
+	// this.canvasCoord = canvasCoord
 
 	this.jqueryObj = $('<div/>',{
 		id: this.id,
 		class: 'sprite',
-		'data-row': this.row,
-		'data-collumn': this.collumn
+		'data-sprite-y': this.spriteCoord.y,
+		'data-sprite-x': this.spriteCoord.x
 	})
-	.css(getSpriteCss(this.row, this.collumn))
+	.css(getSpriteCss(this.spriteCoord.y, this.spriteCoord.x))
 	.draggable({
 				revert: 'invalid',
 				revertDuration: 25,
@@ -174,7 +177,10 @@ function sprite(id, row, collumn) {
 	})
 }
 
-
+function coord(y, x) {
+	this.x = x
+	this.y = y
+}
 
 
 /////// utils
@@ -185,17 +191,23 @@ function calcSpritePosition(coord) {
 	return - 32 * coord + "px"
 }
 
-function getSpriteCss(row, collumn) {
+function getSpriteCss(spriteY, spriteX) {
 	return {
 				'background': 'url("img/sprites.jpeg") ' +
-				calcSpritePosition(collumn) + ' ' +
-				calcSpritePosition(row)
+				calcSpritePosition(spriteX) + ' ' +
+				calcSpritePosition(spriteY)
 			}
 }
 
-function drawSprite(sprite, row, collumn) {
+function drawSprite(sprite, spriteY, spriteX) {
 		$(sprite)
-			.css(getSpriteCss(row, collumn))
+			.css(getSpriteCss(spriteY, spriteX))
 			.removeClass('selected')
 			.addClass('canvas')
+			console.log(sprite)
+			mapCanvas.logMap()
+	}
+
+	function pad(n) {
+		return n < 10 ? '0' + n : n
 	}
