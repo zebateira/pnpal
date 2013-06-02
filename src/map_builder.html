@@ -1,10 +1,6 @@
 <link rel="stylesheet" href="css/map_builder.css">
 
 <div class="row">
-    <div class="span4">
-        <h2>Map Builder</h2>
-        <p>Build your custom map for a PnP game session with hundreds of predefined sprites!</p>        
-    </div>
 </div>
 
 <div id="map_builder">
@@ -13,13 +9,23 @@
             <select>
                 
             </select>
-            <button id="import" class="btn" title="import map from filesystem">import <i class="icon-file"></i></button>
-            <button id="export" class="btn" title="export current map">export <i class="icon-download-alt"></i></button>
+            <a id="import" class="btn" title="import map from filesystem">
+                <input type="file" style="display: none">
+                </input>
+                    import 
+                    <i class="icon-file"></i>
+            </a>
+            <a id="export" class="btn" title="export current map">
+                export
+                <i class="icon-download-alt"></i>
+            </a>
         </div>
         <div class="sprite-container">
             
         </div>
     </div>
+
+
     <div id="map_canvas" class="sprite-container">
 
     </div>

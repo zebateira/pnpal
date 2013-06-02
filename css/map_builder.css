@@ -10,7 +10,8 @@
 .sprite-container .sprite {
     min-width: 32px;
     min-height: 32px;
-    background: url("../img/sprites.jpeg") 0px 0px;
+    background-image: url("../img/sprites.jpeg");
+    background-position: 0px 0px;
     display: inline-block;
     overflow: auto;
 }
@@ -52,8 +53,7 @@ div#map_builder div#sprite_selector select {
     width: inherit;
     display: inline-block;
 }
-div#map_builder div#sprite_selector button {
-    /*margin-bottom: 10px;*/
+div#map_builder div#sprite_selector a {
     float: right;
 }
 

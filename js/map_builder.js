@@ -9,10 +9,16 @@ var max_collumns = 63
 
 // Sprite Categories
 var spriteCategory = {
-	'terrains': { spriteX1: 0, spriteY1: 0, spriteX2: 21, spriteY2: 0 },
-	'terrains 2': { spriteX1: 17, spriteY1: 52, spriteX2: 28, spriteY2: 52 },
-	'doorways': { spriteX1: 22, spriteY1: 0, spriteX2: 27, spriteY2: 0 },
-	'doors': { spriteX1: 3, spriteY1: 2, spriteX2: 16, spriteY2: 2 }
+	'terrains': { 
+		'1': { spriteX1: 0, spriteY1: 0, spriteX2: 21, spriteY2: 0 },
+		'2': { spriteX1: 17, spriteY1: 52, spriteX2: 28, spriteY2: 52 },
+	},
+	'doorways': {
+		'1': { spriteX1: 22, spriteY1: 0, spriteX2: 27, spriteY2: 0 }
+	},
+	'doors': {
+		'2': { spriteX1: 3, spriteY1: 2, spriteX2: 16, spriteY2: 2 }
+	}
 }
 
 
@@ -25,6 +31,10 @@ spriteSelector.addOptions()
 spriteSelector.optionChanged()
 mapCanvas.drawBackground()
 
+$('a#export.btn').click(function(e) {
+	var blob = new Blob([mapCanvas.export()], {type: 'text/xml;charset=utf-8'});
+	saveAs(blob, 'map.xml');
+})
 
 /////// Objects
 
@@ -46,21 +56,44 @@ function spriteSelector(selector) {
 
 	this.optionChanged = function() {
 		var category = spriteCategory[$('select').val()]
-		
+
 		$('div#sprite_selector > div.sprite-container').html('')
 
-		for (var spriteY = category.spriteY1; spriteY <= category.spriteY2; ++spriteY)
-			for (var spriteX = category.spriteX1; spriteX <= category.spriteX2; ++spriteX)
-				new sprite('', new coord(spriteY, spriteX))
-					.jqueryObj
-					.draggable('enable')
-					.appendTo('div#sprite_selector > div.sprite-container')
+		for (var subcategory in category) {
+			var subcategory = category[subcategory]
+			for (var spriteY = subcategory.spriteY1; spriteY <= subcategory.spriteY2; ++spriteY)
+				for (var spriteX = subcategory.spriteX1; spriteX <= subcategory.spriteX2; ++spriteX)
+					new sprite('', new coord(spriteY, spriteX))
+						.jqueryObj
+						.draggable('enable')
+						.appendTo('div#sprite_selector > div.sprite-container')
+		}
 	}
 }
 
 function mapCanvas(selector) {
 	this.selector = selector
 	this.canvasGrid = new Array(canvasDimY)
+
+	this.export = function() {
+		var xml = '<?xml version="1.0"?>' +
+							'<map height="' + canvasDimY + '" ' +
+									 'width="' + canvasDimX + '" ' +
+							'>'
+
+
+		for (var y = 0; y < canvasDimY; ++y)
+			for (var x = 0; x < canvasDimX; ++x) {
+				xml += '<sprite ' +
+							 'canvasX="' + this.canvasGrid[y][x].coord.x + '" ' +
+							 'canvasY="' + this.canvasGrid[y][x].coord.y + '" ' +
+							 'spriteX="' + this.canvasGrid[y][x].spriteCoord.x + '" ' +
+							 'spriteY="' + this.canvasGrid[y][x].spriteCoord.y + '" ' +
+							 '/>'
+			}
+
+		return xml += '</map>'
+	}
 
 	this.logMap = function() {
 		for(var y = 0; y < canvasDimY; ++y) {
@@ -88,7 +121,7 @@ function mapCanvas(selector) {
 			$(this.selector).append('</br>')
 		}
 
-		this.logMap()
+		// this.logMap()
 	}
 
 	this.drawSprite = function(sprite, spriteCoord) {
@@ -102,7 +135,7 @@ function mapCanvas(selector) {
 
 				this.canvasGrid[y][x].spriteCoord = spriteCoord
 				
-				this.logMap()
+				// this.logMap()
 	}
 
 	this.addSprite = function(newSprite) {
@@ -207,9 +240,9 @@ function calcSpritePosition(coord) {
 
 function getSpriteCss(spriteY, spriteX) {
 	return {
-				'background': 'url("img/sprites.jpeg") ' +
-				calcSpritePosition(spriteX) + ' ' +
-				calcSpritePosition(spriteY)
+				'background-image': 'url("img/sprites.jpeg")',
+				'background-position': calcSpritePosition(spriteX) + ' ' +
+						calcSpritePosition(spriteY)
 			}
 }
 
