@@ -35,8 +35,7 @@ function spriteSelector(selector) {
 
 	this.addOptions = function() {
 
-		$('<select></select>')
-			.appendTo(this.selector)
+		$('div#sprite_type_selector select')
 			.bind('change', this.optionChanged)
 
 		for(var category in spriteCategory) {

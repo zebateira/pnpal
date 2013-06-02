@@ -37,7 +37,7 @@ div#map_builder div#sprite_selector {
     float: left;
     background-color: lightgrey;
     display: inline-block;
-    width: 30%;
+    width: 31%;
     min-width: 50px;
     padding: 10px;
     margin: 10px;
@@ -50,6 +50,11 @@ div#map_builder div#sprite_selector {
 
 div#map_builder div#sprite_selector select {
     width: inherit;
+    display: inline-block;
+}
+div#map_builder div#sprite_selector button {
+    /*margin-bottom: 10px;*/
+    float: right;
 }
 
 div#map_builder div#map_canvas {
