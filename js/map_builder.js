@@ -19,8 +19,7 @@ var spriteCategory = {
 /////// main
 
 var mapCanvas = new spriteGridContainer('#map_canvas.sprite-container')
-var spriteSelectorCanvas = new spriteSelectorCanvas('div#sprite_selector > div.sprite-container')
-var spriteSelector = new spriteSelector('div#sprite_selector > div#sprite_type_selector', spriteSelectorCanvas)
+var spriteSelector = new spriteSelector('div#sprite_selector > div#sprite_type_selector')
 
 spriteSelector.addOptions()
 spriteSelector.optionChanged()
@@ -28,10 +27,11 @@ mapCanvas.drawBackground()
 
 
 /////// Objects
-function spriteSelector(selector, canvas) {
+
+// Sprite Selector Object
+function spriteSelector(selector) {
 
 	this.selector = selector
-	this.canvas = canvas
 
 	this.addOptions = function() {
 
@@ -56,21 +56,6 @@ function spriteSelector(selector, canvas) {
 					.jqueryObj
 					.draggable('enable')
 					.appendTo('div#sprite_selector > div.sprite-container')
-	}
-}
-
-// Sprite Container Object
-function spriteSelectorCanvas(selector) {
-	this.selector = selector
-
-	this.addSprite = function(sprite) {
-		return sprite.jqueryObj
-					.draggable('enable')
-					.appendTo(this.selector)
-	}
-
-	this.cleanSprites = function() {
-		$(this.selector).html('')
 	}
 }
 
@@ -128,14 +113,17 @@ function spriteGridContainer(selector) {
 						if( $(event.toElement).hasClass('canvas') )
 							drawSprite(event.toElement,
 								$('.selected').attr('data-row'), 
-								$('.selected').attr('data-collumn'))					},
+								$('.selected').attr('data-collumn'))
+					},
 					stop: function(event, ui) {
 						var elem = $(event.toElement)
 
-						if( !elem.hasClass('sprite') ||
-								!elem.hasClass('canvas') ||
-								!$('.selected') )
+						if( !(elem.hasClass('sprite') &&
+								elem.hasClass('canvas')) ||
+								!$('.selected') ) {
+							event.preventDefault()
 							return;
+						}
 						
 						drawSprite(elem,
 							$('.selected').attr('data-row'), 
