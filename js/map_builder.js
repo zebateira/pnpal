@@ -18,7 +18,7 @@ var spriteCategory = {
 
 /////// main
 
-var mapCanvas = new spriteGridContainer('#map_canvas.sprite-container')
+var mapCanvas = new mapCanvas('#map_canvas.sprite-container')
 var spriteSelector = new spriteSelector('div#sprite_selector > div#sprite_type_selector')
 
 spriteSelector.addOptions()
@@ -59,16 +59,16 @@ function spriteSelector(selector) {
 	}
 }
 
-function spriteGridContainer(selector) {
+function mapCanvas(selector) {
 	this.selector = selector
-	this.spriteGrid = new Array(canvasDimY)
+	this.canvasGrid = new Array(canvasDimY)
 
 	this.logMap = function() {
 		for(var y = 0; y < canvasDimY; ++y) {
 			var rowLog = ''
 			for(var x = 0; x < canvasDimX; ++x) {
-				rowLog += pad(this.spriteGrid[y][x].spriteCoord.x) + '-' +
-									pad(this.spriteGrid[y][x].spriteCoord.y) + ' '
+				rowLog += pad(this.canvasGrid[y][x].spriteCoord.x) + '-' +
+									pad(this.canvasGrid[y][x].spriteCoord.y) + ' '
 			}
 			console.log(rowLog)
 		}
@@ -79,10 +79,12 @@ function spriteGridContainer(selector) {
 	this.drawBackground = function() {
 
 		for(var y = 0; y < canvasDimY; ++y) {
-			this.spriteGrid[y] = new Array(canvasDimX)
+			this.canvasGrid[y] = new Array(canvasDimX)
 
 			for(var x = 0; x < canvasDimX; ++x) {
-				this.spriteGrid[y][x] = this.addSprite(new sprite(new coord(y, x), new coord(0,0)))
+				this.canvasGrid[y][x] = this.addSprite(
+								new sprite(new coord(y, x), new coord(0,0))
+						)
 			}
 			$(this.selector).append('</br>')
 		}
@@ -90,6 +92,19 @@ function spriteGridContainer(selector) {
 		this.logMap()
 	}
 
+	this.drawSprite = function(sprite, spriteCoord) {
+			$(sprite)
+				.css(getSpriteCss(spriteCoord.y, spriteCoord.x))
+				.removeClass('selected')
+				.addClass('canvas')
+
+				var x = $(sprite).attr('data-x')
+				var y = $(sprite).attr('data-y')
+
+				this.canvasGrid[y][x].spriteCoord = spriteCoord
+				
+				this.logMap()
+	}
 
 	this.addSprite = function(newSprite) {
 
@@ -101,7 +116,7 @@ function spriteGridContainer(selector) {
 						var spriteY = $(event.toElement).attr('data-sprite-y')
 						var spriteX = $(event.toElement).attr('data-sprite-x')
 
-						drawSprite(event.target, spriteY, spriteX)
+						mapCanvas.drawSprite(event.target, new coord(spriteY, spriteX))
 					}
 				})
 				.draggable({
@@ -112,9 +127,9 @@ function spriteGridContainer(selector) {
 					drag: function(event, ui) {
 
 						if( $(event.toElement).hasClass('canvas') )
-							drawSprite(event.toElement,
-								$('.selected').attr('data-sprite-y'), 
-								$('.selected').attr('data-sprite-x'))
+							mapCanvas.drawSprite(event.toElement,
+								new coord($('.selected').attr('data-sprite-y'), 
+													$('.selected').attr('data-sprite-x')))
 					},
 					stop: function(event, ui) {
 						var elem = $(event.toElement)
@@ -126,9 +141,9 @@ function spriteGridContainer(selector) {
 							return;
 						}
 						
-						drawSprite(elem,
+						mapCanvas.drawSprite(elem, new coord(
 							$('.selected').attr('data-sprite-y'), 
-							$('.selected').attr('data-sprite-x'))
+							$('.selected').attr('data-sprite-x')))
 						event.preventDefault()
 					}
 				})
@@ -137,7 +152,7 @@ function spriteGridContainer(selector) {
 					var spriteY = $('.selected').attr('data-sprite-y')
 					var spriteX = $('.selected').attr('data-sprite-x')
 
-					drawSprite(e.toElement, spriteY, spriteX)
+					mapCanvas.drawSprite(e.toElement, new coord(spriteY, spriteX))
 				})
 
 		return newSprite
@@ -151,13 +166,14 @@ function sprite(canvasCoord, spriteCoord) {
 
 	this.coord = canvasCoord
 	this.spriteCoord = spriteCoord
-	// this.canvasCoord = canvasCoord
 
 	this.jqueryObj = $('<div/>',{
 		id: this.id,
 		class: 'sprite',
 		'data-sprite-y': this.spriteCoord.y,
-		'data-sprite-x': this.spriteCoord.x
+		'data-sprite-x': this.spriteCoord.x,
+		'data-y': this.coord.y,
+		'data-x': this.coord.x
 	})
 	.css(getSpriteCss(this.spriteCoord.y, this.spriteCoord.x))
 	.draggable({
@@ -182,7 +198,6 @@ function coord(y, x) {
 	this.y = y
 }
 
-
 /////// utils
 
 // calculates pixel position for the background image position attribute. p.e. 0 = 0*32 = -32px, 3 => 3*32 = -96px
@@ -199,15 +214,6 @@ function getSpriteCss(spriteY, spriteX) {
 			}
 }
 
-function drawSprite(sprite, spriteY, spriteX) {
-		$(sprite)
-			.css(getSpriteCss(spriteY, spriteX))
-			.removeClass('selected')
-			.addClass('canvas')
-			console.log(sprite)
-			mapCanvas.logMap()
-	}
-
-	function pad(n) {
-		return n < 10 ? '0' + n : n
-	}
+function pad(n) {
+	return n < 10 ? '0' + n : n
+}
