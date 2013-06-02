@@ -12,31 +12,16 @@
     min-height: 32px;
     background: url("img/sprites.jpeg") 0px 0px;
     display: inline-block;
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
-    opacity: 1;
     overflow: auto;
 }
 
-.sprite-container .sprite.canvas {
-    background-color: black;
+.sprite-container .sprite.canvas:hover {
+    -webkit-opacity: 0.95;
+    -moz-opacity: 0.95;
+    opacity: 0.95;
 }
 
 div#sprite_selector .sprite-container .sprite.selected {
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
-    opacity: 1;
-    -webkit-transform: scale(1.2, 1.2);
-    -moz-transform: scale(1.2, 1.2);
-    transform: scale(1.2, 1.2);
-    position: relative;
-    z-index: 9999; /* brings to the front */
-}
-
-div#sprite_selector .sprite-container .sprite:hover {
-    -webkit-opacity: 1;
-    -moz-opacity: 1;
-    opacity: 1;
     -webkit-transform: scale(1.1, 1.1);
     -moz-transform: scale(1.1, 1.1);
     transform: scale(1.1, 1.1);
