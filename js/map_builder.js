@@ -103,12 +103,6 @@ function spriteGridContainer(selector) {
 		this.logMap()
 	}
 
-	this.drawSprite = function(sprite, row, collumn) {
-		$(sprite)
-			.css(getSpriteCss(row, collumn))
-			.removeClass('selected')
-			.addClass('canvas')
-	}
 
 	this.addSprite = function() {
 		var newSprite = new sprite('', 0, 0)
@@ -121,7 +115,7 @@ function spriteGridContainer(selector) {
 						var row = $(event.toElement).attr('data-row')
 						var collumn = $(event.toElement).attr('data-collumn')
 
-						this.drawSprite(event.target, row, collumn)
+						drawSprite(event.target, row, collumn)
 					}
 				})
 				.draggable({
@@ -132,10 +126,9 @@ function spriteGridContainer(selector) {
 					drag: function(event, ui) {
 
 						if( $(event.toElement).hasClass('canvas') )
-							$(event.toElement).css(getSpriteCss(
+							drawSprite(event.toElement,
 								$('.selected').attr('data-row'), 
-								$('.selected').attr('data-collumn')))
-					},
+								$('.selected').attr('data-collumn'))					},
 					stop: function(event, ui) {
 						var elem = $(event.toElement)
 
@@ -143,19 +136,18 @@ function spriteGridContainer(selector) {
 								!elem.hasClass('canvas') ||
 								!$('.selected') )
 							return;
-
-						elem.css(
-								getSpriteCss(
-									$('.selected').attr('data-row'), 
-									$('.selected').attr('data-collumn')))
+						
+						drawSprite(elem,
+							$('.selected').attr('data-row'), 
+							$('.selected').attr('data-collumn'))
 						event.preventDefault()
 					}
 				})
 				.unbind('click')
 				.click(function(e) {
-					$(e.toElement).css(getSpriteCss(
+					drawSprite(e.toElement,
 						$('.selected').attr('data-row'), 
-						$('.selected').attr('data-collumn')))
+						$('.selected').attr('data-collumn'))
 				})
 
 		return newSprite
@@ -186,7 +178,6 @@ function sprite(id, row, collumn) {
 				snap: true,
 				snapMode: 'inner'
 			})
-	// .droppable('disable')
 	.click(function(){
 		$('.selected').not(this).each(function() {
 			$(this).removeClass('selected')
@@ -213,3 +204,10 @@ function getSpriteCss(row, collumn) {
 				calcSpritePosition(row)
 			}
 }
+
+function drawSprite(sprite, row, collumn) {
+		$(sprite)
+			.css(getSpriteCss(row, collumn))
+			.removeClass('selected')
+			.addClass('canvas')
+	}
