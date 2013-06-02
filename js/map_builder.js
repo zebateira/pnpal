@@ -31,10 +31,29 @@ spriteSelector.addOptions()
 spriteSelector.optionChanged()
 mapCanvas.drawBackground()
 
-$('a#export.btn').click(function(e) {
+// export
+$('a#export.btn').click(function() {
 	var blob = new Blob([mapCanvas.export()], {type: 'text/xml;charset=utf-8'});
 	saveAs(blob, 'map.xml');
 })
+
+// import
+$('a#import.btn').click(function() {
+	$('input#import_map').click()
+
+	return false
+})
+
+var fileReader = new FileReader()
+
+fileReader.onload = function(e) {
+  mapCanvas.import($.parseXML(e.target.result))
+}
+
+$('input#import_map').change(function() {
+  fileReader.readAsText(this.files[0])
+})
+
 
 /////// Objects
 
@@ -63,7 +82,7 @@ function spriteSelector(selector) {
 			var subcategory = category[subcategory]
 			for (var spriteY = subcategory.spriteY1; spriteY <= subcategory.spriteY2; ++spriteY)
 				for (var spriteX = subcategory.spriteX1; spriteX <= subcategory.spriteX2; ++spriteX)
-					new sprite('', new coord(spriteY, spriteX))
+					new sprite(category, new coord(0, 0), new coord(spriteY, spriteX))
 						.jqueryObj
 						.draggable('enable')
 						.appendTo('div#sprite_selector > div.sprite-container')
@@ -75,6 +94,19 @@ function mapCanvas(selector) {
 	this.selector = selector
 	this.canvasGrid = new Array(canvasDimY)
 
+	this.import = function(xml) {
+		var map = xml.childNodes[0]
+
+		for (var i = 0; i < map.childNodes.length; ++i) {
+			var $xmlSprite = $(map.childNodes[i])
+			var sprite = document.getElementById($xmlSprite.attr('id'))
+
+			this.drawSprite(sprite, 
+				new coord( $xmlSprite.attr('spriteY'),
+									 $xmlSprite.attr('spriteX')))
+		}
+	}
+
 	this.export = function() {
 		var xml = '<?xml version="1.0"?>' +
 							'<map height="' + canvasDimY + '" ' +
@@ -85,6 +117,8 @@ function mapCanvas(selector) {
 		for (var y = 0; y < canvasDimY; ++y)
 			for (var x = 0; x < canvasDimX; ++x) {
 				xml += '<sprite ' +
+							 'type="' + this.canvasGrid[y][x].spriteType + '" ' +
+							 'id="' + this.canvasGrid[y][x].id + '" ' +
 							 'canvasX="' + this.canvasGrid[y][x].coord.x + '" ' +
 							 'canvasY="' + this.canvasGrid[y][x].coord.y + '" ' +
 							 'spriteX="' + this.canvasGrid[y][x].spriteCoord.x + '" ' +
@@ -115,7 +149,7 @@ function mapCanvas(selector) {
 
 			for(var x = 0; x < canvasDimX; ++x) {
 				this.canvasGrid[y][x] = this.addSprite(
-								new sprite(new coord(y, x), new coord(0,0))
+								new sprite('default', new coord(y, x), new coord(0,0))
 						)
 			}
 			$(this.selector).append('</br>')
@@ -193,9 +227,10 @@ function mapCanvas(selector) {
 }
 
 // Sprite Object
-function sprite(canvasCoord, spriteCoord) {
+function sprite(type, canvasCoord, spriteCoord) {
 	this.id = canvasCoord.x + '-' + canvasCoord.y
 
+	this.spriteType = type
 	this.coord = canvasCoord
 	this.spriteCoord = spriteCoord
 
@@ -240,7 +275,7 @@ function calcSpritePosition(coord) {
 
 function getSpriteCss(spriteY, spriteX) {
 	return {
-				'background-image': 'url("img/sprites.jpeg")',
+				'background-image': 'url("../img/sprites.jpeg")',
 				'background-position': calcSpritePosition(spriteX) + ' ' +
 						calcSpritePosition(spriteY)
 			}
