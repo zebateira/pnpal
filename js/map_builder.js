@@ -4,21 +4,55 @@ var canvasDimY = 20
 
 
 // Maximum number of sprites in images (max x and max y for the sprite image)
-var max_rows = 70
-var max_collumns = 63
+var maxX = 70
+var maxY = 63
 
 // Sprite Categories
 var spriteCategory = {
 	'terrains': { 
 		'1': { spriteX1: 0, spriteY1: 0, spriteX2: 21, spriteY2: 0 },
 		'2': { spriteX1: 17, spriteY1: 52, spriteX2: 28, spriteY2: 52 },
+		'3': { spriteX1: 28, spriteY1: 0, spriteX2: 30, spriteY2: 0 },
+		'3': { spriteX1: 23, spriteY1: 2, spriteX2: 31, spriteY2: 2 }
 	},
 	'doorways': {
 		'1': { spriteX1: 22, spriteY1: 0, spriteX2: 27, spriteY2: 0 }
 	},
 	'doors': {
-		'2': { spriteX1: 3, spriteY1: 2, spriteX2: 16, spriteY2: 2 }
+		'1': { spriteX1: 3, spriteY1: 2, spriteX2: 15, spriteY2: 2 },
+		'2': { spriteX1: 32, spriteY1: 6, spriteX2: 63, spriteY2: 7 }
+	},
+	'goods': {
+		'1': { spriteX1: 17, spriteY1: 3, spriteX2: 30, spriteY2: 3 },
+		'2': { spriteX1: 0, spriteY1: 4, spriteX2: 31, spriteY2: 6 },
+		'3': { spriteX1: 0, spriteY1: 7, spriteX2: 22, spriteY2: 7 }
+	},
+	'armour': {
+		'1': { spriteX1: 24, spriteY1: 7, spriteX2: 31, spriteY2: 7 },
+		'2': { spriteX1: 0, spriteY1: 8, spriteX2: 19, spriteY2: 8 },
+		'3': { spriteX1: 8, spriteY1: 9, spriteX2: 31, spriteY2: 9 },
+		'4': { spriteX1: 0, spriteY1: 10, spriteX2: 12, spriteY2: 10 }
+	},
+	'shields': {
+		'1': { spriteX1: 20, spriteY1: 8, spriteX2: 31, spriteY2: 8 },
+		'2': { spriteX1: 0, spriteY1: 9, spriteX2: 7, spriteY2: 9 }
+	},
+	'weapons': {
+		'1': { spriteX1: 0, spriteY1: 54, spriteX2: 26, spriteY2: 54 },
+		'2': { spriteX1: 13, spriteY1: 10, spriteX2: 31, spriteY2: 10 },
+		'3': { spriteX1: 0, spriteY1: 11, spriteX2: 31, spriteY2: 11 }
+	},
+	'chars': {
+		'1': { spriteX1: 0, spriteY1: 18, spriteX2: 30, spriteY2: 28 }
+	},
+	'mobs': {
+		'1': { spriteX1: 0, spriteY1: 30, spriteX2: 31, spriteY2: 41 }
+	},
+	'all': {
+		'1': { spriteX1: 0, spriteY1: 0, spriteX2: maxX, spriteY2: maxY }
 	}
+
+
 }
 
 
