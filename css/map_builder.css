@@ -9,7 +9,7 @@
 .sprite-container .sprite {
     min-width: 32px;
     min-height: 32px;
-    background-image: url("../img/sprites.jpeg");
+    background-image: url("img/sprites.jpeg");
     background-position: 0px 0px;
     display: inline-block;
     overflow: auto;
