@@ -118,6 +118,8 @@ function spriteSelector(selector) {
 	this.optionChanged = function() {
 		var category = spriteCategory[$('select').val()]
 
+		$('.selected').removeClass('selected')
+
 		$('div#sprite_selector > div.sprite-container').html('')
 
 		for (var subcategory in category) {
@@ -146,7 +148,8 @@ function mapCanvas(selector) {
 			var $xmlSprite = $(map.childNodes[i])
 			var sprite = document.getElementById($xmlSprite.attr('id'))
 
-			this.drawSprite(sprite, 
+			this.drawSprite(sprite,
+				$xmlSprite.attr('type'),
 				new coord( $xmlSprite.attr('spriteY'),
 									 $xmlSprite.attr('spriteX')))
 		}
@@ -203,7 +206,7 @@ function mapCanvas(selector) {
 
 	}
 
-	this.drawSprite = function(sprite, spriteCoord) {
+	this.drawSprite = function(sprite, type, spriteCoord) {
 			$(sprite)
 				.css(getSpriteCss(spriteCoord.y, spriteCoord.x))
 				.removeClass('selected')
@@ -211,7 +214,6 @@ function mapCanvas(selector) {
 
 				var x = $(sprite).attr('data-x')
 				var y = $(sprite).attr('data-y')
-				var type = $(sprite).attr('data-type')
 				console.log(type)
 
 				this.canvasGrid[y][x].spriteCoord = spriteCoord
@@ -232,8 +234,9 @@ function mapCanvas(selector) {
 
 						var spriteY = $(event.toElement).attr('data-sprite-y')
 						var spriteX = $(event.toElement).attr('data-sprite-x')
+						var type = $(event.toElement).attr('data-type')
 
-						mapCanvas.drawSprite(event.target, new coord(spriteY, spriteX))
+						mapCanvas.drawSprite(event.target, type, new coord(spriteY, spriteX))
 					}
 				})
 				.draggable({
@@ -248,6 +251,7 @@ function mapCanvas(selector) {
 
 						if( $(event.toElement).hasClass('canvas') )
 							mapCanvas.drawSprite(event.toElement,
+											$('.selected').attr('data-type'),
 								new coord($('.selected').attr('data-sprite-y'), 
 													$('.selected').attr('data-sprite-x')))
 					},
@@ -261,9 +265,10 @@ function mapCanvas(selector) {
 							return;
 						}
 						
-						mapCanvas.drawSprite(elem, new coord(
-							$('.selected').attr('data-sprite-y'), 
-							$('.selected').attr('data-sprite-x')))
+						mapCanvas.drawSprite(elem, 
+							$('.selected').attr('data-type'),
+							new coord($('.selected').attr('data-sprite-y'), 
+												$('.selected').attr('data-sprite-x')))
 						event.preventDefault()
 					}
 				})
@@ -271,8 +276,11 @@ function mapCanvas(selector) {
 				.click(function(e) {
 					var spriteY = $('.selected').attr('data-sprite-y')
 					var spriteX = $('.selected').attr('data-sprite-x')
+					var type = $('.selected').attr('data-type')
 
-					mapCanvas.drawSprite(e.toElement, new coord(spriteY, spriteX))
+					mapCanvas.drawSprite(e.toElement, 
+						type,
+						new coord(spriteY, spriteX))
 				})
 
 		return newSprite
