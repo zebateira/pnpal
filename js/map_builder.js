@@ -124,7 +124,7 @@ function spriteSelector(selector) {
 			var subcategory = category[subcategory]
 			for (var spriteY = subcategory.spriteY1; spriteY <= subcategory.spriteY2; ++spriteY)
 				for (var spriteX = subcategory.spriteX1; spriteX <= subcategory.spriteX2; ++spriteX)
-					new sprite(category, new coord(-1, -1), new coord(spriteY, spriteX))
+					new sprite($('select').val(), new coord(-1, -1), new coord(spriteY, spriteX))
 						.jqueryObj
 						.draggable('enable')
 						.appendTo('div#sprite_selector > div.sprite-container')
@@ -162,8 +162,8 @@ function mapCanvas(selector) {
 		for (var y = 0; y < canvasDimY; ++y)
 			for (var x = 0; x < canvasDimX; ++x)
 				xml += '<sprite ' +
-							 'type="' + this.canvasGrid[y][x].spriteType + '" ' +
 							 'id="' + this.canvasGrid[y][x].id + '" ' +
+							 'type="' + this.canvasGrid[y][x].spriteType + '" ' +
 							 'canvasX="' + this.canvasGrid[y][x].coord.x + '" ' +
 							 'canvasY="' + this.canvasGrid[y][x].coord.y + '" ' +
 							 'spriteX="' + this.canvasGrid[y][x].spriteCoord.x + '" ' +
@@ -211,8 +211,11 @@ function mapCanvas(selector) {
 
 				var x = $(sprite).attr('data-x')
 				var y = $(sprite).attr('data-y')
+				var type = $(sprite).attr('data-type')
+				console.log(type)
 
 				this.canvasGrid[y][x].spriteCoord = spriteCoord
+				this.canvasGrid[y][x].spriteType = type
 				
 				// this.logMap()
 	}
@@ -224,6 +227,9 @@ function mapCanvas(selector) {
 				.appendTo(this.selector)
 				.droppable({
 					drop: function(event, ui) {
+						if( $(event.toElement).hasClass('canvas') )
+							return false
+
 						var spriteY = $(event.toElement).attr('data-sprite-y')
 						var spriteX = $(event.toElement).attr('data-sprite-x')
 
@@ -236,6 +242,9 @@ function mapCanvas(selector) {
 					opacity: 0,
 					refreshPositions: true,
 					drag: function(event, ui) {
+						if( !$(event.toElement).hasClass('canvas') ) {
+							return;
+						}
 
 						if( $(event.toElement).hasClass('canvas') )
 							mapCanvas.drawSprite(event.toElement,
@@ -243,10 +252,10 @@ function mapCanvas(selector) {
 													$('.selected').attr('data-sprite-x')))
 					},
 					stop: function(event, ui) {
-						var elem = $(event.toElement)
+						var elem = event.toElement
 
-						if( !(elem.hasClass('sprite') &&
-								elem.hasClass('canvas')) ||
+						if( !($(elem).hasClass('sprite') &&
+								$(elem).hasClass('canvas')) ||
 								!$('.selected') ) {
 							event.preventDefault()
 							return;
@@ -285,7 +294,8 @@ function sprite(type, canvasCoord, spriteCoord) {
 		'data-sprite-y': this.spriteCoord.y,
 		'data-sprite-x': this.spriteCoord.x,
 		'data-y': this.coord.y,
-		'data-x': this.coord.x
+		'data-x': this.coord.x,
+		'data-type': this.spriteType
 	})
 	.css(getSpriteCss(this.spriteCoord.y, this.spriteCoord.x))
 	.draggable({
