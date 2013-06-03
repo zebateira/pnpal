@@ -22,6 +22,9 @@ var spriteCategory = {
 		'1': { spriteX1: 3, spriteY1: 2, spriteX2: 15, spriteY2: 2 },
 		'2': { spriteX1: 32, spriteY1: 6, spriteX2: 63, spriteY2: 7 }
 	},
+	'loot': {
+		'1': { spriteX1: 25, spriteY1: 4, spriteX2: 31, spriteY2: 4 }
+	},
 	'goods': {
 		'1': { spriteX1: 17, spriteY1: 3, spriteX2: 30, spriteY2: 3 },
 		'2': { spriteX1: 0, spriteY1: 4, spriteX2: 31, spriteY2: 6 },
@@ -64,6 +67,11 @@ var spriteSelector = new spriteSelector('div#sprite_selector > div#sprite_type_s
 spriteSelector.addOptions()
 spriteSelector.optionChanged()
 mapCanvas.drawBackground()
+
+// reset
+$('a#reset.btn').click(function() {
+	mapCanvas.drawBackground()
+})
 
 // export
 $('a#export.btn').click(function() {
@@ -179,6 +187,8 @@ function mapCanvas(selector) {
 	}
 
 	this.drawBackground = function() {
+
+		$('div#map_builder div#map_canvas').html('')
 
 		for(var y = 0; y < canvasDimY; ++y) {
 			this.canvasGrid[y] = new Array(canvasDimX)

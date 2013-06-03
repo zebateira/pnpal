@@ -30,42 +30,54 @@ div#sprite_selector .sprite-container .sprite.selected {
 }
 
 div#map_builder {
-    vertical-align: center;
+    vertical-align: sub;
+
 }
 
 div#map_builder div#sprite_selector {
     float: left;
     background-color: lightgrey;
     display: inline-block;
-    width: 31%;
+    width: 28%;
     min-width: 50px;
     padding: 10px;
-    margin: 10px;
+    margin-right: 10px;
 
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     border-radius: 6px;
-    /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
 }
 
 div#map_builder div#sprite_selector select {
     width: inherit;
     display: inline-block;
 }
-div#map_builder div#sprite_selector a {
-    float: right;
-}
 
 div#map_builder div#map_canvas {
+    float: left;
     background-color: grey;
     display: inline-block;
-    width: auto;
-    /*min-width: 650px;*/
+    /*width: auto;*/
     padding: 10px;
-    margin: 10px;
+    margin-right: 10px;
 
     -moz-border-radius: 6px;
     -webkit-border-radius: 6px;
     border-radius: 6px;
-    /*IE 7 AND 8 DO NOT SUPPORT BORDER RADIUS*/
+}
+
+div#map_builder div#actions {
+    float: left;
+    background-color: lightgrey;
+    display: inline-block;
+    padding: 10px;
+
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+}
+
+div#map_builder div#actions a#import,
+div#map_builder div#actions a#export {
+    margin-bottom: 10px;
 }
